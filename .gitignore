@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- RAGOps ---
+# Keep the Python template's `lib/` rule from ignoring frontend/lib later.
+!frontend/lib/
+node_modules/
+.next/

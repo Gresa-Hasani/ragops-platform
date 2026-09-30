@@ -1,0 +1,47 @@
+[project]
+name = "ragops-backend"
+version = "0.1.0"
+description = "RAGOps: production RAG evaluation and observability platform (backend)."
+requires-python = ">=3.11"
+# Dependencies are pinned in requirements.txt / requirements-dev.txt.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+asyncio_default_test_loop_scope = "function"
+# Integration tests need real infrastructure (docker compose); run them explicitly
+# with `pytest -m integration`.
+addopts = "-ra --strict-markers -m 'not integration'"
+markers = [
+    "integration: requires running PostgreSQL and Qdrant (docker compose up postgres qdrant)",
+]
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "BLE", "SIM", "RUF", "ASYNC", "S", "PT"]
+ignore = [
+    "S101",  # assert is used for type narrowing and in tests
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "BLE"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["app", "tests", "alembic"]
+exclude = ["alembic/versions/"]
